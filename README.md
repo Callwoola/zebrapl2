@@ -9,50 +9,50 @@ from zebrapl2 import Label
 
 label=Label(89,36)
 
-# Main Box
-label.origin(6,2)
-label.draw_box(80,33)
+# # Main Box
+label.origin(2,6)
+label.draw_box(33,80)
 label.endorigin()
 
-# QR Code Box
-label.origin(6,2)
-label.draw_box(20,22.5)
+# # QR Code Box
+label.origin(12.5,6)
+label.draw_box(22.5,20)
 label.endorigin()
 
-## Date String
-label.origin(6,20.5)
+# ## Date String
+label.origin(14.5,6)
 label.textblock(20)
-label.write_text("14/06/2019", char_height=2, char_width=2)
+label.write_text("14/06/2019", char_height=2, char_width=2, orientation="R")
 label.endorigin()
 
-## QR Code
-label.origin(9.5,5.5)
-label.write_qrcode('ptkr.uk/dm/bc/uss/1090',error_correction="L",magnification=6)
+# ## QR Code
+label.origin(19,9)
+label.write_qrcode('ptkr.uk/dm/bc/uss/1090',error_correction="L",magnification=6,orientation='R')
 label.endorigin()
 
-# Text Box
-label.origin(26,2)
-label.draw_box(60,22.5)
+# # Text Box
+label.origin(12.5,26)
+label.draw_box(22.5,60)
 label.endorigin()
 
-label.origin(28,4)
+label.origin(14,28)
 label.textblock(60, lines=4, justification="L", line_spacing=0.7)
-label.write_text("S-3AX-UA\&sjzgreig\&HPSI0114i-b\&bezi_1 D3", char_height=4, char_width=4)
+label.write_text("S-3AX-UA\&sjzgreig\&HPSI0114i-b\&bezi_1 D3", char_height=4, char_width=4, orientation='R')
 label.endorigin()
 
-# 1D Barcode
-label.origin(11,25.5)
-label.write_barcode(5,'C',print_interpretation_line='N')
+# # 1D Barcode
+label.origin(6.5,11)
+label.write_barcode(5,'C',print_interpretation_line='N',orientation='R')
 label.write_text('ptkr.uk/dm/bc/uss/1090')
 label.endorigin()
 
-label.origin(6,31.5)
+label.origin(3,6)
 label.textblock(80)
-label.write_text("ptkr.uk/dm/bc/uss/1090", char_height=2.5, char_width=2.5)
+label.write_text("ptkr.uk/dm/bc/uss/1090", char_height=2.5, char_width=2.5, orientation='R')
 label.endorigin()
 
 print(label.dumpZPL())
-l.preview()
+label.preview()
 ```
 
 The generated ZPL2 code is:

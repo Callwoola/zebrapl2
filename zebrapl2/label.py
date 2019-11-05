@@ -150,13 +150,13 @@ class Label(object):
 
         self.code+=barcode_zpl
 
-    def write_qrcode(self, data, model=2, magnification=3, error_correction="Q", mask_value=7):
+    def write_qrcode(self, data, model=2, magnification=3, error_correction="Q", mask_value=7, orientation='N'):
         assert model in (1,2)
         assert magnification in range(1,11)
         assert error_correction in ("H","Q","M","L")
         assert mask_value in range(0,8)
 
-        self.code+='^BQN,{},{},{},{}'.format(model,magnification,error_correction,mask_value)
+        self.code+='^BQ{},{},{},{},{}'.format(orientation,model,magnification,error_correction,mask_value)
         self.code+='^FD{}A,{}'.format(error_correction,data)
 
     def dumpZPL(self): return self.code+"^XZ"
@@ -167,54 +167,8 @@ class Label(object):
     def preview(self, index=0):
         try:
             url='http://api.labelary.com/v1/printers/{}dpmm/labels/{:f}x{:f}/{}/'.format(
-                self.dpmm, self.width/25.4, self.height/25.4, index)
+                int(self.dpmm), self.width/25.4, self.height/25.4, index)
+            print(url)
             res=urlopen(url, self.dumpZPL().encode()).read()
             Image.open(io.BytesIO(res)).show()
         except IOError: raise Exception("Invalid preview received, mostlikely bad ZPL2 code uploaded.")
-
-if __name__=="__main__":
-    label=Label(89,36)
-
-    # Main Box
-    label.origin(6,2)
-    label.draw_box(80,33)
-    label.endorigin()
-
-    # QR Code Box
-    label.origin(6,2)
-    label.draw_box(20,22.5)
-    label.endorigin()
-
-    ## Date String
-    label.origin(6,20.5)
-    label.textblock(20)
-    label.write_text("14/06/2019", char_height=2, char_width=2)
-    label.endorigin()
-
-    ## QR Code
-    label.origin(9.5,5.5)
-    label.write_qrcode('ptkr.uk/dm/bc/uss/1090',error_correction="L",magnification=6)
-    label.endorigin()
-
-    # Text Box
-    label.origin(26,2)
-    label.draw_box(60,22.5)
-    label.endorigin()
-
-    label.origin(28,4)
-    label.textblock(60, lines=4, justification="L", line_spacing=0.7)
-    label.write_text("S-3AX-UA\&sjzgreig\&HPSI0114i-b\&bezi_1 D3", char_height=4, char_width=4)
-    label.endorigin()
-
-    # 1D Barcode
-    label.origin(11,25.5)
-    label.write_barcode(5,'C',print_interpretation_line='N')
-    label.write_text('ptkr.uk/dm/bc/uss/1090')
-    label.endorigin()
-
-    label.origin(6,31.5)
-    label.textblock(80)
-    label.write_text("ptkr.uk/dm/bc/uss/1090", char_height=2.5, char_width=2.5)
-    label.endorigin()
-
-    print(label.dumpZPL())

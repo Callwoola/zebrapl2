@@ -80,10 +80,15 @@ class Printer(object):
         return (length, width)
     
     def get_dpi(self): return self.get_dpmm()*25
+
+    @property
+    def dpi(self): return self.get_dpi()
     
     def get_dpmm(self): return int(self.get_printer_info()['dpmm'])
-        
 
+    @property
+    def dpmm(self): return self.get_dpmm()
+        
 class TCPPrinter(Printer):
     def __init__(self, host, port=9100):
         super().__init__(self)
