@@ -9,28 +9,28 @@ from zebrapl2 import Label
 
 label=Label(89,36)
 
-# # Main Box
+# Main Box
 label.origin(2,6)
 label.draw_box(33,80)
 label.endorigin()
 
-# # QR Code Box
+# QR Code Box
 label.origin(12.5,6)
 label.draw_box(22.5,20)
 label.endorigin()
 
-# ## Date String
+## Date String
 label.origin(14.5,6)
 label.textblock(20)
 label.write_text("14/06/2019", char_height=2, char_width=2, orientation="R")
 label.endorigin()
 
-# ## QR Code
+## QR Code
 label.origin(19,9)
 label.write_qrcode('ptkr.uk/dm/bc/uss/1090',error_correction="L",magnification=6,orientation='R')
 label.endorigin()
 
-# # Text Box
+# Text Box
 label.origin(12.5,26)
 label.draw_box(22.5,60)
 label.endorigin()
@@ -40,7 +40,7 @@ label.textblock(60, lines=4, justification="L", line_spacing=0.7)
 label.write_text("S-3AX-UA\&sjzgreig\&HPSI0114i-b\&bezi_1 D3", char_height=4, char_width=4, orientation='R')
 label.endorigin()
 
-# # 1D Barcode
+# 1D Barcode
 label.origin(6.5,11)
 label.write_barcode(5,'C',print_interpretation_line='N',orientation='R')
 label.write_text('ptkr.uk/dm/bc/uss/1090')
