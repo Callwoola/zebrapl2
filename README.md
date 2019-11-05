@@ -64,7 +64,7 @@ The generated ZPL2 code is:
 ## Installation
 
 ```sh    
-$ pip install --user zpl
+$ pip install --user zebrapl2
 ```
 
 ## Requirements
