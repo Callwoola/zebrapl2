@@ -34,22 +34,22 @@ with open(os.path.join(here, 'README.rst'), encoding='utf-8') as f:
     long_description = f.read()
 
 setup(
-    name='zpl',
+    name='zebrapl2',
 
     # Versions should comply with PEP440.  For a discussion on single-sourcing
     # the version across setup.py and the project code, see
     # https://packaging.python.org/en/latest/single_source_version.html
-    version=find_version('zpl', '__init__.py'),
+    version=find_version('zebrapl2', '__init__.py'),
 
     description='Driver and generator for ZPL2 lables.',
     long_description=long_description,
 
     # The project's main homepage.
-    url='https://github.com/cod3monk/zpl',
+    url='https://github.com/jazzycamel/zebrapl2',
 
     # Author details
-    author='Julian Hammer',
-    author_email='julian.hammer@u-sys.org',
+    author='Rob Kent',
+    author_email='jazzycamel@pm.me',
 
     # Choose your license
     license='AGPLv3',
@@ -74,8 +74,6 @@ setup(
 
         # Specify the Python versions you support here. In particular, ensure
         # that you indicate whether you support Python 2, Python 3 or both.
-        'Programming Language :: Python :: 2',
-        'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
@@ -100,7 +98,7 @@ setup(
     install_requires=[
         'Pillow'
     ],
-    python_requires='>=2.7',
+    python_requires='>=3.4',
 
     # List additional groups of dependencies here (e.g. development dependencies).
     # You can install these using the following syntax, for example:
