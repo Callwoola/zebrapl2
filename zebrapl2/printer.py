@@ -15,6 +15,7 @@ class Printer(object):
     def get_printer_info(self):
         if not self._info:
             ret=self.request_info('~HI').strip()
+            ret=ret.decode('utf8')
             m=re.match('\x02(?P<model>[^,]+),' +
                          r'(?P<version>[^,]+),' +
                          r'(?P<dpmm>[^,]+),' +
@@ -25,7 +26,9 @@ class Printer(object):
     
     def get_printer_status(self, reload=False):
         if not self._stat or reload:
-            ret=self.request_info('~HS').strip().split('\r\n')
+            ret=self.request_info('~HS').decode('utf8')
+            ret=ret.split('\r\n')
+
             m=re.match('\x02(?P<interface>[^,]+),' +
                          r'(?P<paper_out>[^,]+),' +
                          r'(?P<pause>[^,]+),' +
@@ -40,21 +43,24 @@ class Printer(object):
                          '(?P<over_temp>[^,]+)\x03', ret[0])
             self._stat.update(m.groupdict())
             
-            m=re.match('\x02(?P<func_settings>[^,]+),' +
-                         r'[^,]+,' +  # unused
-                         r'(?P<head_up>[^,]+),' +
-                         r'(?P<ribbon_out>[^,]+),' +
-                         r'(?P<thermoal_transfer>[^,]+),' +
-                         r'(?P<print_mode>[^,]+),' +
-                         r'(?P<print_width_mode>[^,]+),' +
-                         r'(?P<label_waiting>[^,]+),' +
-                         r'(?P<labels_remaining>[^,]+),' +
-                         r'(?P<format_while_printing>[^,]+),' +
-                         '(?P<graphics_stored_in_mem>[^,]+)\x03', ret[1])
-            self._stat.update(m.groupdict())
-            m=re.match('\x02(?P<password>[^,]+),' +
-                         '(?P<static_ram>[^,]+)\x03', ret[2])
-            self._stat.update(m.groupdict())
+            if len(ret[1]):
+                m=re.match('\x02(?P<func_settings>[^,]+),' +
+                            r'[^,]+,' +  # unused
+                            r'(?P<head_up>[^,]+),' +
+                            r'(?P<ribbon_out>[^,]+),' +
+                            r'(?P<thermoal_transfer>[^,]+),' +
+                            r'(?P<print_mode>[^,]+),' +
+                            r'(?P<print_width_mode>[^,]+),' +
+                            r'(?P<label_waiting>[^,]+),' +
+                            r'(?P<labels_remaining>[^,]+),' +
+                            r'(?P<format_while_printing>[^,]+),' +
+                            '(?P<graphics_stored_in_mem>[^,]+)\x03', ret[1])
+                self._stat.update(m.groupdict())
+
+            if len(ret)>2 and len(ret[2]):
+                m=re.match('\x02(?P<password>[^,]+),' +
+                            '(?P<static_ram>[^,]+)\x03', ret[2])
+                self._stat.update(m.groupdict())
         
         return self._stat
     
@@ -77,6 +83,7 @@ class Printer(object):
     
     def get_label_dimensions(self):
         length=int(self.get_printer_status()['label_length'])//self.get_dpmm()
+        width=0
         return (length, width)
     
     def get_dpi(self): return self.get_dpmm()*25
@@ -91,16 +98,16 @@ class Printer(object):
         
 class TCPPrinter(Printer):
     def __init__(self, host, port=9100):
-        super().__init__(self)
+        super().__init__()
         self.socket=socket.create_connection((host, port))
     
     def send_job(self, zpl2):
         self.socket.sendall(zpl2)
     
     def request_info(self, command):
-        self.socket.sendall(command)
-        buf=""
-        while '\x03' not in buf:
+        self.socket.sendall(command.encode('utf8'))
+        buf=b""
+        while b'\x03' not in buf:
             buf+=self.socket.recv(4096)
         return buf
     
